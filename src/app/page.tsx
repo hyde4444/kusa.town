@@ -3,74 +3,74 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from 'react'
 
+// Frame arrays moved outside component to prevent recreation on every render
+const frames = ['header2_1_t1.png', 'header2_2_t1.png', 'header2_3_t1.png']
+const titleFrames = ['title-1.png', 'title-2.png', 'title-3.png']
+const spinFrames = [
+  'Spinning-kusa-1-1.png', 'Spinning-kusa-1-2.png', 'Spinning-kusa-1-3.png', 'Spinning-kusa-1-4.png', 'Spinning-kusa-1-5.png',
+  'Spinning-kusa-1-6.png', 'Spinning-kusa-1-7.png', 'Spinning-kusa-1-8.png', 'Spinning-kusa-1-9.png', 'Spinning-kusa-1-10.png',
+  'Spinning-kusa-1-11.png', 'Spinning-kusa-1-12.png', 'Spinning-kusa-1-13.png', 'Spinning-kusa-1-14.png', 'Spinning-kusa-1-15.png',
+  'Spinning-kusa-1-16.png', 'Spinning-kusa-1-17.png', 'Spinning-kusa-1-18.png', 'Spinning-kusa-1-19.png', 'Spinning-kusa-1-20.png'
+]
+const potatoFrames = [
+  'Kusa-potato-1-1.png', 'Kusa-potato-1-2.png', 'Kusa-potato-1-3.png', 'Kusa-potato-1-4.png', 'Kusa-potato-1-5.png',
+  'Kusa-potato-1-6.png', 'Kusa-potato-1-7.png', 'Kusa-potato-1-8.png', 'Kusa-potato-1-9.png', 'Kusa-potato-1-10.png',
+  'Kusa-potato-1-11.png', 'Kusa-potato-1-12.png', 'Kusa-potato-1-13.png', 'Kusa-potato-1-14.png', 'Kusa-potato-1-15.png',
+  'Kusa-potato-1-16.png', 'Kusa-potato-1-17.png', 'Kusa-potato-1-18.png', 'Kusa-potato-1-19.png', 'Kusa-potato-1-20.png'
+]
+const nikiFrames = [
+  '_Niki-fly-1-1.png', '_Niki-fly-1-2.png', '_Niki-fly-1-3.png', '_Niki-fly-1-4.png', '_Niki-fly-1-5.png', '_Niki-fly-1-6.png'
+]
+const yanuFrames = [
+  'Yanu-walk-1-1.png', 'Yanu-walk-1-2.png', 'Yanu-walk-1-3.png', 'Yanu-walk-1-4.png', 'Yanu-walk-1-5.png',
+  'Yanu-walk-1-6.png', 'Yanu-walk-1-7.png', 'Yanu-walk-1-8.png'
+]
+const inuFrames = [
+  'Inu-run-1-1.png', 'Inu-run-1-2.png', 'Inu-run-1-3.png', 'Inu-run-1-4.png', 'Inu-run-1-5.png',
+  'Inu-run-1-6.png', 'Inu-run-1-7.png', 'Inu-run-1-8.png', 'Inu-run-1-9.png', 'Inu-run-1-10.png'
+]
+const kochoFrames = [
+  'Kocho-camera-1-1.png', 'Kocho-camera-1-2.png', 'Kocho-camera-1-3.png', 'Kocho-camera-1-4.png', 'Kocho-camera-1-5.png',
+  'Kocho-camera-1-6.png', 'Kocho-camera-1-7.png', 'Kocho-camera-1-8.png', 'Kocho-camera-1-9.png', 'Kocho-camera-1-10.png',
+  'Kocho-camera-1-11.png', 'Kocho-camera-1-12.png', 'Kocho-camera-1-13.png', 'Kocho-camera-1-14.png', 'Kocho-camera-1-15.png',
+  'Kocho-camera-1-16.png', 'Kocho-camera-1-17.png', 'Kocho-camera-1-18.png', 'Kocho-camera-1-19.png', 'Kocho-camera-1-20.png'
+]
+const mobFrames = [
+  'Mobu-clap-1-1.png', 'Mobu-clap-1-2.png', 'Mobu-clap-1-3.png'
+]
+const xavierFrames = [
+  'Tenshi-Akuma-1-1.png', 'Tenshi-Akuma-1-2.png', 'Tenshi-Akuma-1-3.png', 'Tenshi-Akuma-1-4.png', 'Tenshi-Akuma-1-5.png', 'Tenshi-Akuma-1-6.png'
+]
+
 export default function Home() {
   const [currentFrame, setCurrentFrame] = useState(0)
-  const frames = ['header2_1_t1.png', 'header2_2_t1.png', 'header2_3_t1.png']
 
   // Title Animation
   const [currentTitleFrame, setCurrentTitleFrame] = useState(0)
-  const titleFrames = ['title-1.png', 'title-2.png', 'title-3.png']
 
   // Spinning Kusa Animation
   const [currentSpinFrame, setCurrentSpinFrame] = useState(0)
-  const spinFrames = [
-    'Spinning-kusa-1-1.png', 'Spinning-kusa-1-2.png', 'Spinning-kusa-1-3.png', 'Spinning-kusa-1-4.png', 'Spinning-kusa-1-5.png',
-    'Spinning-kusa-1-6.png', 'Spinning-kusa-1-7.png', 'Spinning-kusa-1-8.png', 'Spinning-kusa-1-9.png', 'Spinning-kusa-1-10.png',
-    'Spinning-kusa-1-11.png', 'Spinning-kusa-1-12.png', 'Spinning-kusa-1-13.png', 'Spinning-kusa-1-14.png', 'Spinning-kusa-1-15.png',
-    'Spinning-kusa-1-16.png', 'Spinning-kusa-1-17.png', 'Spinning-kusa-1-18.png', 'Spinning-kusa-1-19.png', 'Spinning-kusa-1-20.png'
-  ]
 
   // Kusa Potato Animation  
   const [currentPotatoFrame, setCurrentPotatoFrame] = useState(0)
-  const potatoFrames = [
-    'Kusa-potato-1-1.png', 'Kusa-potato-1-2.png', 'Kusa-potato-1-3.png', 'Kusa-potato-1-4.png', 'Kusa-potato-1-5.png',
-    'Kusa-potato-1-6.png', 'Kusa-potato-1-7.png', 'Kusa-potato-1-8.png', 'Kusa-potato-1-9.png', 'Kusa-potato-1-10.png',
-    'Kusa-potato-1-11.png', 'Kusa-potato-1-12.png', 'Kusa-potato-1-13.png', 'Kusa-potato-1-14.png', 'Kusa-potato-1-15.png',
-    'Kusa-potato-1-16.png', 'Kusa-potato-1-17.png', 'Kusa-potato-1-18.png', 'Kusa-potato-1-19.png', 'Kusa-potato-1-20.png'
-  ]
 
   // Niki Fly Animation
   const [currentNikiFrame, setCurrentNikiFrame] = useState(0)
-  const nikiFrames = [
-    '_Niki-fly-1-1.png', '_Niki-fly-1-2.png', '_Niki-fly-1-3.png', '_Niki-fly-1-4.png', '_Niki-fly-1-5.png', '_Niki-fly-1-6.png'
-  ]
 
   // Yanu Walk Animation
   const [currentYanuFrame, setCurrentYanuFrame] = useState(0)
-  const yanuFrames = [
-    'Yanu-walk-1-1.png', 'Yanu-walk-1-2.png', 'Yanu-walk-1-3.png', 'Yanu-walk-1-4.png', 'Yanu-walk-1-5.png',
-    'Yanu-walk-1-6.png', 'Yanu-walk-1-7.png', 'Yanu-walk-1-8.png'
-  ]
 
   // Inu Run Animation
   const [currentInuFrame, setCurrentInuFrame] = useState(0)
-  const inuFrames = [
-    'Inu-run-1-1.png', 'Inu-run-1-2.png', 'Inu-run-1-3.png', 'Inu-run-1-4.png', 'Inu-run-1-5.png',
-    'Inu-run-1-6.png', 'Inu-run-1-7.png', 'Inu-run-1-8.png', 'Inu-run-1-9.png', 'Inu-run-1-10.png'
-  ]
-
-
 
   // Kocho Camera Animation
   const [currentKochoFrame, setCurrentKochoFrame] = useState(0)
-  const kochoFrames = [
-    'Kocho-camera-1-1.png', 'Kocho-camera-1-2.png', 'Kocho-camera-1-3.png', 'Kocho-camera-1-4.png', 'Kocho-camera-1-5.png',
-    'Kocho-camera-1-6.png', 'Kocho-camera-1-7.png', 'Kocho-camera-1-8.png', 'Kocho-camera-1-9.png', 'Kocho-camera-1-10.png',
-    'Kocho-camera-1-11.png', 'Kocho-camera-1-12.png', 'Kocho-camera-1-13.png', 'Kocho-camera-1-14.png', 'Kocho-camera-1-15.png',
-    'Kocho-camera-1-16.png', 'Kocho-camera-1-17.png', 'Kocho-camera-1-18.png', 'Kocho-camera-1-19.png', 'Kocho-camera-1-20.png'
-  ]
 
   // Mobu Clap Animation
   const [currentMobFrame, setCurrentMobFrame] = useState(0)
-  const mobFrames = [
-    'Mobu-clap-1-1.png', 'Mobu-clap-1-2.png', 'Mobu-clap-1-3.png'
-  ]
 
   // Xavier Frame Animation
   const [currentXavierFrame, setCurrentXavierFrame] = useState(0)
-  const xavierFrames = [
-    'Tenshi-Akuma-1-1.png', 'Tenshi-Akuma-1-2.png', 'Tenshi-Akuma-1-3.png', 'Tenshi-Akuma-1-4.png', 'Tenshi-Akuma-1-5.png', 'Tenshi-Akuma-1-6.png'
-  ]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -231,7 +231,7 @@ export default function Home() {
       }
       Object.values(currentIntervals).forEach(interval => clearInterval(interval))
     }
-  }, [potatoFrames, nikiFrames, yanuFrames, inuFrames, kochoFrames, mobFrames, xavierFrames])
+  }, [potatoFrames.length, nikiFrames.length, yanuFrames.length, inuFrames.length, kochoFrames.length, mobFrames.length, xavierFrames.length])
 
   useEffect(() => {
     let ticking = false
@@ -779,6 +779,7 @@ export default function Home() {
           src={`/${spinFrames[currentSpinFrame]}`}
           alt="Spinning Kusa"
           fill
+          sizes="(max-width: 640px) 80px, 140px"
           style={{
             objectFit: 'contain'
           }}
