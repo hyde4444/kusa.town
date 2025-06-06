@@ -186,15 +186,19 @@ export default function Home() {
       >
         {/* Animated Frame Images */}
         <div className="absolute inset-0 w-full h-full">
-          <Image
+        <Image
             src={`/${frames[currentFrame]}`}
             alt="Header animation"
             fill
             style={{
-              objectFit: 'cover'
+              objectFit: 'cover',
+              objectPosition: 'center'
             }}
-            priority
-          />
+            sizes="100vw"
+            quality={100}
+            unoptimized={true}
+          priority
+        />
         </div>
 
         {/* Header Content Container */}
@@ -220,8 +224,8 @@ export default function Home() {
             {/* LINE Icon */}
             <a 
               href="#" 
-              target="_blank" 
-              rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
                 width: '36px',
@@ -238,8 +242,8 @@ export default function Home() {
             {/* Store Icon */}
             <a 
               href="#" 
-              target="_blank" 
-              rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
               className="bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
                 width: '36px',
@@ -256,8 +260,8 @@ export default function Home() {
             {/* YouTube Icon */}
             <a 
               href="https://www.youtube.com/@drinkable_" 
-              target="_blank" 
-              rel="noopener noreferrer"
+          target="_blank"
+          rel="noopener noreferrer"
               className="bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
                 width: '36px',
@@ -279,8 +283,7 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative bg-white overflow-hidden" style={{
           height: '100vh',
-          minHeight: '400px',
-          paddingTop: '100px'
+          minHeight: '400px'
         }}>
           {/* Background Video - Responsive */}
           <video
@@ -346,11 +349,11 @@ export default function Home() {
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>怠惰</span>
+                          <span>急停</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>浅はかでチョロい</span>
+                          <span>法はかでチョロい</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
@@ -438,27 +441,27 @@ export default function Home() {
                       <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>中性的</span>
+                          <span>くさのペット</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>知的</span>
+                          <span>姑息で狡猾</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>冷静</span>
+                          <span>人間界出身</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>勉強が得意</span>
+                          <span>語尾に「にゃ」をつけたがる</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>何かを隠している</span>
+                          <span>ニキにライバル心を抱いている</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>正体不明</span>
+                          <span>しっぽがある</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
@@ -490,27 +493,27 @@ export default function Home() {
                       <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>いぬ</span>
+                          <span>ニキに命を救われた</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>忠実</span>
+                          <span>バキバキに筋肉をつけようとしている</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>頭がいい</span>
+                          <span>ニキを尊敬している</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>人間界出身</span>
+                          <span>真面目</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさが飼い主（実質主人）</span>
+                          <span>努力家</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>足が速い</span>
+                          <span>くさの同級生</span>
                         </li>
                       </ul>
                     </div>
@@ -532,29 +535,29 @@ export default function Home() {
                   </div>
                   <div className="flex-1 text-center sm:text-left">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      コチョ
+                      校長
                     </h2>
                     <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
                       <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>さっぱりしている</span>
+                          <span>テキトー</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>明るい</span>
+                          <span>金持ち</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>つよい</span>
+                          <span>ノリがいい</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>写真家</span>
+                          <span>趣味は写真</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさの同級生</span>
+                          <span>くさ達の学校の校長</span>
                         </li>
                       </ul>
                     </div>
@@ -582,35 +585,23 @@ export default function Home() {
                       <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>天才少年</span>
+                          <span>天使と悪魔ぽく登場したが一般人</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ナルシスト</span>
+                          <span>実は普通</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>中二病</span>
+                          <span>空気が読めない</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>意識が高い</span>
+                          <span>天然</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>悪魔と天使が宿っている</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>人格が分裂気味</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ゲームが得意</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ゲームクリエイター志望</span>
+                          <span>優しい</span>
                         </li>
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
@@ -626,7 +617,7 @@ export default function Home() {
               <div className="w-full flex justify-center">
                 <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
-                    <Image
+          <Image
                       src={`/${mobFrames[currentMobFrame]}`}
                       alt="モブ character"
                       width={200}
@@ -642,23 +633,7 @@ export default function Home() {
                       <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
                         <li className="flex items-start">
                           <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>どこにでもいそう</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>手をたたいて応援するのが好き</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>根っからの良い奴</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>地域の人気者</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>年齢不詳（大人？子供？）</span>
+                          <span>モブキャラ</span>
                         </li>
                       </ul>
                     </div>
@@ -669,66 +644,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Spinning Character Section - Responsive */}
-        <section className="relative min-h-screen bg-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-12 lg:mb-16 text-black">
-              おまけ
-            </h2>
-            <div className="flex justify-center">
-              <Image
-                src={`/${spinFrames[currentSpinFrame]}`}
-                alt="Spinning Kusa"
-                width={200}
-                height={200}
-                className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-              />
-            </div>
-            <p className="mt-6 sm:mt-8 lg:mt-12 text-sm sm:text-base lg:text-lg text-gray-600 max-w-md mx-auto">
-              スクロールしてくさを回してみよう！
-            </p>
-          </div>
-        </section>
-
-        {/* Footer - Responsive */}
-        <footer className="bg-gray-900 text-white py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto text-center">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6">
-              ドリンカブル🥬
-            </h3>
-            <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">
-              くさとその仲間たちの冒険は続く...
-            </p>
-            <div className="flex justify-center space-x-4 sm:space-x-6">
-              <a 
-                href="#" 
-                className="text-green-400 hover:text-green-300 transition-colors text-sm sm:text-base"
-              >
-                LINE
-              </a>
-              <a 
-                href="#" 
-                className="text-blue-400 hover:text-blue-300 transition-colors text-sm sm:text-base"
-              >
-                Store
-              </a>
-              <a 
-                href="https://www.youtube.com/@drinkable_" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-red-400 hover:text-red-300 transition-colors text-sm sm:text-base"
-              >
-                YouTube
-              </a>
-            </div>
-            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-700">
-              <p className="text-xs sm:text-sm text-gray-400">
-                © 2024 Drinkable Kusa. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
       </main>
 
       {/* Fixed Footer with Upside Down Animation */}
@@ -740,7 +655,7 @@ export default function Home() {
           left: 0,
           right: 0,
           zIndex: 9999,
-          height: '128px'
+          height: '100px'
         }}
       >
         {/* Animated Frame Images - Upside Down */}
@@ -751,8 +666,12 @@ export default function Home() {
             fill
             style={{
               objectFit: 'cover',
+              objectPosition: 'center',
               transform: 'scaleY(-1)'
             }}
+            sizes="100vw"
+            quality={100}
+            unoptimized={true}
             priority
           />
         </div>
@@ -762,11 +681,10 @@ export default function Home() {
       <div 
         className="fixed right-4 z-[10000]"
         style={{
-          bottom: '110px', // 158px footer height + 16px gap
+          bottom: '110px', // 100px footer height + 10px gap
           right: '50px',
           width: '140px',
           height: '140px',
-          // backgroundColor: 'rgba(255, 0, 0, 0.3)' // Temporary red background for debugging
         }}
       >
         <Image
