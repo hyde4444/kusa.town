@@ -634,6 +634,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        {/* Bottom spacer to ensure content is visible above footer - 100px footer + extra space */}
+        <div style={{ height: '150px' }}></div>
       </main>
 
       {/* Fixed Footer with Upside Down Animation */}
@@ -667,14 +670,14 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Fixed Bottom-Right Spinning Kusa */}
+      {/* Fixed Bottom-Right Spinning Kusa - Responsive */}
       <div 
-        className="fixed right-4 z-[10000]"
+        className="fixed z-[10000] spinning-kusa-container"
         style={{
           bottom: '110px', // 100px footer height + 10px gap
-          right: '50px',
-          width: '140px',
-          height: '140px',
+          right: '20px',
+          width: '80px',
+          height: '80px',
         }}
       >
         <Image
@@ -686,7 +689,18 @@ export default function Home() {
           }}
           priority
         />
-    </div>
+      </div>
+
+      {/* CSS for responsive spinning kusa */}
+      <style jsx>{`
+        @media (min-width: 640px) {
+          .spinning-kusa-container {
+            right: 50px !important;
+            width: 140px !important;
+            height: 140px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
