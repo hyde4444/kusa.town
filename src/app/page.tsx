@@ -147,24 +147,16 @@ export default function Home() {
   }, [xavierFrames.length])
 
   useEffect(() => {
-    let ticking = false
-
     const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY
-          const documentHeight = document.documentElement.scrollHeight - window.innerHeight
-          const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
-          const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
-          const frameIndex = Math.floor(doubleProgress * spinFrames.length)
-          setCurrentSpinFrame(frameIndex)
-          ticking = false
-        })
-        ticking = true
-      }
+      const scrollY = window.scrollY
+      const documentHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
+      const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
+      const frameIndex = Math.floor(doubleProgress * spinFrames.length)
+      setCurrentSpinFrame(frameIndex)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [spinFrames.length])
 
@@ -642,9 +634,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-        
-        {/* Bottom spacer to ensure content is visible above footer - 100px footer + extra space */}
-        <div style={{ height: '150px' }}></div>
       </main>
 
       {/* Fixed Footer with Upside Down Animation */}
@@ -678,14 +667,14 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Fixed Bottom-Right Spinning Kusa - Responsive */}
+      {/* Fixed Bottom-Right Spinning Kusa */}
       <div 
-        className="fixed z-[10000] spinning-kusa-container"
+        className="fixed right-4 z-[10000]"
         style={{
           bottom: '110px', // 100px footer height + 10px gap
-          right: '20px',
-          width: '80px',
-          height: '80px',
+          right: '50px',
+          width: '140px',
+          height: '140px',
         }}
       >
         <Image
@@ -698,17 +687,6 @@ export default function Home() {
           priority
         />
     </div>
-
-      {/* CSS for responsive spinning kusa */}
-      <style jsx>{`
-        @media (min-width: 640px) {
-          .spinning-kusa-container {
-            right: 50px !important;
-            width: 140px !important;
-            height: 140px !important;
-          }
-        }
-      `}</style>
     </>
   );
 }
