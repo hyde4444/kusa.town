@@ -407,8 +407,8 @@ export default function Home() {
           height: '100vh',
           minHeight: '400px'
         }}>
-          {/* Background Video - Responsive */}
-          <video
+          {/* Background Video - Responsive - TEMPORARILY DISABLED FOR TESTING */}
+          {/* <video
             autoPlay
             muted
             loop
@@ -419,7 +419,7 @@ export default function Home() {
             }}
           >
             <source src="/hero4_proxy_compressed.mov" type="video/mp4" />
-          </video>
+          </video> */}
           
           {/* Content overlay */}
           <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-8 md:px-16 lg:px-24">
@@ -454,13 +454,14 @@ export default function Home() {
                       style={{ border: 'none', outline: 'none', background: selectedCharacter === index ? '' : 'transparent' }}
                     >
                       <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 p-2">
-                        <Image
+                        <img
                           src={`/${character.frames[0]}`}
                           alt={`${character.name} thumbnail`}
                           width={64}
                           height={64}
                           className="w-full h-full object-contain"
                           loading="eager"
+                          draggable={false}
                         />
                       </div>
                       
@@ -487,13 +488,14 @@ export default function Home() {
                   {/* Large Animation Area */}
                   <div className="flex-shrink-0">
                     <div className="relative">
-                      <Image
+                      <img
                         src={`/${characters[selectedCharacter].frames[currentCharacterFrame]}`}
                         alt={`${characters[selectedCharacter].name} animation`}
                         width={300}
                         height={300}
                         className="object-contain sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px]"
-                        priority
+                        loading="eager"
+                        draggable={false}
                       />
 
                     </div>
