@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 export default function Home() {
   const [currentFrame, setCurrentFrame] = useState(0)
@@ -88,75 +88,141 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [titleFrames.length])
 
+  // Refs for intersection observer
+  const potatoRef = useRef(null)
+  const nikiRef = useRef(null)
+  const yanuRef = useRef(null)
+  const inuRef = useRef(null)
+  const kochoRef = useRef(null)
+  const mobRef = useRef(null)
+  const xavierRef = useRef(null)
+
+  // Animation intervals storage
+  const intervalsRef = useRef<Record<string, NodeJS.Timeout>>({})
+
+  // Character animation control
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentPotatoFrame((prev) => (prev + 1) % potatoFrames.length)
-    }, 50) // 20fps = 50ms per frame
-
-    return () => clearInterval(interval)
-  }, [potatoFrames.length])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentNikiFrame((prev) => (prev + 1) % nikiFrames.length)
-    }, 35) // 30fps = 33ms per frame
-
-    return () => clearInterval(interval)
-  }, [nikiFrames.length])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentYanuFrame((prev) => (prev + 1) % yanuFrames.length)
-    }, 50) // 20fps = 50ms per frame
-
-    return () => clearInterval(interval)
-  }, [yanuFrames.length])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentInuFrame((prev) => (prev + 1) % inuFrames.length)
-    }, 42) // 30fps = 33ms per frame
-
-    return () => clearInterval(interval)
-  }, [inuFrames.length])
-
-
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentKochoFrame((prev) => (prev + 1) % kochoFrames.length)
-    }, 50) // 20fps = 50ms per frame
-
-    return () => clearInterval(interval)
-  }, [kochoFrames.length])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentMobFrame((prev) => (prev + 1) % mobFrames.length)
-    }, 50) // 5fps = 200ms per frame (slower for 3 frames)
-
-    return () => clearInterval(interval)
-  }, [mobFrames.length])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentXavierFrame((prev) => (prev + 1) % xavierFrames.length)
-    }, 42) // 24fps = 42ms per frame
-
-    return () => clearInterval(interval)
-  }, [xavierFrames.length])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
-      const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
-      const frameIndex = Math.floor(doubleProgress * spinFrames.length)
-      setCurrentSpinFrame(frameIndex)
+    const startAnimation = (name: string, setter: (fn: (prev: number) => number) => void, frames: string[], fps: number) => {
+      if (intervalsRef.current[name]) {
+        console.log(`🔄 ${name} animation already running - skipping start`)
+        return // Already running
+      }
+      
+      console.log(`🎬 Starting animation for ${name} at ${fps}fps`)
+      const interval = setInterval(() => {
+        setter((prev: number) => (prev + 1) % frames.length)
+      }, 1000 / fps)
+      
+      intervalsRef.current[name] = interval
     }
 
-    window.addEventListener('scroll', handleScroll)
+    const stopAnimation = (name: string) => {
+      if (intervalsRef.current[name]) {
+        console.log(`⏹️ Stopping animation for ${name}`)
+        clearInterval(intervalsRef.current[name])
+        delete intervalsRef.current[name]
+      } else {
+        console.log(`❌ ${name} animation already stopped`)
+      }
+    }
+
+    // Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+      console.log(`👀 Intersection Observer triggered for ${entries.length} entries`)
+      
+      entries.forEach(entry => {
+        const target = entry.target
+        const isVisible = entry.isIntersecting
+        const ratio = Math.round(entry.intersectionRatio * 100)
+
+        if (target === potatoRef.current) {
+          console.log(`🥬 くさ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('potato', setCurrentPotatoFrame, potatoFrames, 20) : stopAnimation('potato')
+        } else if (target === nikiRef.current) {
+          console.log(`💪 ニキ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('niki', setCurrentNikiFrame, nikiFrames, 30) : stopAnimation('niki')
+        } else if (target === yanuRef.current) {
+          console.log(`🐱 ヤヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('yanu', setCurrentYanuFrame, yanuFrames, 20) : stopAnimation('yanu')
+        } else if (target === inuRef.current) {
+          console.log(`🐕 イヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('inu', setCurrentInuFrame, inuFrames, 24) : stopAnimation('inu')
+        } else if (target === kochoRef.current) {
+          console.log(`🏫 校長: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('kocho', setCurrentKochoFrame, kochoFrames, 20) : stopAnimation('kocho')
+        } else if (target === mobRef.current) {
+          console.log(`👤 モブ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('mob', setCurrentMobFrame, mobFrames, 20) : stopAnimation('mob')
+        } else if (target === xavierRef.current) {
+          console.log(`👼 ザビエル・ハエ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
+          isVisible ? startAnimation('xavier', setCurrentXavierFrame, xavierFrames, 24) : stopAnimation('xavier')
+        }
+      })
+    }, { 
+      threshold: 0.1, // Start animation when 10% visible
+      rootMargin: '50px' // Start animation 50px before entering viewport
+    })
+
+    // Observe all character elements
+    const refs = [potatoRef, nikiRef, yanuRef, inuRef, kochoRef, mobRef, xavierRef]
+    const characterNames = ['くさ', 'ニキ', 'ヤヌ', 'イヌ', '校長', 'モブ', 'ザビエル・ハエ']
+    
+    console.log('🔍 Setting up Intersection Observer for characters...')
+    refs.forEach((ref, index) => {
+      if (ref.current) {
+        observer.observe(ref.current)
+        console.log(`✅ Observing ${characterNames[index]}`)
+      } else {
+        console.log(`❌ Failed to observe ${characterNames[index]} - ref not ready`)
+      }
+    })
+
+    // Add a way to check current animation status
+    if (typeof window !== 'undefined') {
+      (window as any).getAnimationStatus = () => {
+        const activeAnimations = Object.keys(intervalsRef.current)
+        console.log(`📊 Animation Status Report:`)
+        console.log(`🎬 Active animations: ${activeAnimations.length}`)
+        if (activeAnimations.length > 0) {
+          console.log(`📝 Running: ${activeAnimations.join(', ')}`)
+        } else {
+          console.log(`😴 No animations running`)
+        }
+        return { active: activeAnimations.length, running: activeAnimations }
+      }
+    }
+
+    return () => {
+      console.log('🧹 Cleaning up Intersection Observer and animations...')
+      observer.disconnect()
+      // Clean up all intervals
+      const activeAnimations = Object.keys(intervalsRef.current)
+      if (activeAnimations.length > 0) {
+        console.log(`🛑 Stopping ${activeAnimations.length} active animations: ${activeAnimations.join(', ')}`)
+      }
+      Object.values(intervalsRef.current).forEach(interval => clearInterval(interval))
+    }
+  }, [potatoFrames.length, nikiFrames.length, yanuFrames.length, inuFrames.length, kochoFrames.length, mobFrames.length, xavierFrames.length])
+
+  useEffect(() => {
+    let ticking = false
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const documentHeight = document.documentElement.scrollHeight - window.innerHeight
+          const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
+          const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
+          const frameIndex = Math.floor(doubleProgress * spinFrames.length)
+          setCurrentSpinFrame(frameIndex)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [spinFrames.length])
 
@@ -309,7 +375,7 @@ export default function Home() {
               
               {/* 1. くさ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={potatoRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${potatoFrames[currentPotatoFrame]}`}
@@ -357,7 +423,7 @@ export default function Home() {
 
               {/* 2. ニキ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={nikiRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${nikiFrames[currentNikiFrame]}`}
@@ -413,7 +479,7 @@ export default function Home() {
 
               {/* 3. ヤヌ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={yanuRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${yanuFrames[currentYanuFrame]}`}
@@ -465,7 +531,7 @@ export default function Home() {
 
               {/* 4. イヌ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={inuRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${inuFrames[currentInuFrame]}`}
@@ -513,7 +579,7 @@ export default function Home() {
 
               {/* 5. コチョ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={kochoRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${kochoFrames[currentKochoFrame]}`}
@@ -557,7 +623,7 @@ export default function Home() {
 
               {/* 6. ザビエル・ハエ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={xavierRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
                     <Image
                       src={`/${xavierFrames[currentXavierFrame]}`}
@@ -605,7 +671,7 @@ export default function Home() {
 
               {/* 7. モブ */}
               <div className="w-full flex justify-center">
-                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div ref={mobRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
                   <div className="flex-shrink-0">
           <Image
                       src={`/${mobFrames[currentMobFrame]}`}
@@ -634,6 +700,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        {/* Bottom spacer to ensure content is visible above footer - 100px footer + extra space */}
+        <div style={{ height: '150px' }}></div>
       </main>
 
       {/* Fixed Footer with Upside Down Animation */}
@@ -667,14 +736,14 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Fixed Bottom-Right Spinning Kusa */}
+      {/* Fixed Bottom-Right Spinning Kusa - Responsive */}
       <div 
-        className="fixed right-4 z-[10000]"
+        className="fixed z-[10000] spinning-kusa-container"
         style={{
           bottom: '110px', // 100px footer height + 10px gap
-          right: '50px',
-          width: '140px',
-          height: '140px',
+          right: '20px',
+          width: '80px',
+          height: '80px',
         }}
       >
         <Image
@@ -687,6 +756,17 @@ export default function Home() {
           priority
         />
     </div>
+
+      {/* CSS for responsive spinning kusa */}
+      <style jsx>{`
+        @media (min-width: 640px) {
+          .spinning-kusa-container {
+            right: 50px !important;
+            width: 140px !important;
+            height: 140px !important;
+          }
+        }
+      `}</style>
     </>
   );
 }
