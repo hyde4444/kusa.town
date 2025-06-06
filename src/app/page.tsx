@@ -147,16 +147,24 @@ export default function Home() {
   }, [xavierFrames.length])
 
   useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      const documentHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
-      const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
-      const frameIndex = Math.floor(doubleProgress * spinFrames.length)
-      setCurrentSpinFrame(frameIndex)
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY
+          const documentHeight = document.documentElement.scrollHeight - window.innerHeight
+          const scrollProgress = Math.min(scrollY / documentHeight, 1) // 0 to 1
+          const doubleProgress = (scrollProgress * 2) % 1 // 0 to 1, twice
+          const frameIndex = Math.floor(doubleProgress * spinFrames.length)
+          setCurrentSpinFrame(frameIndex)
+          ticking = false
+        })
+        ticking = true
+      }
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [spinFrames.length])
 
@@ -689,7 +697,7 @@ export default function Home() {
           }}
           priority
         />
-      </div>
+    </div>
 
       {/* CSS for responsive spinning kusa */}
       <style jsx>{`
