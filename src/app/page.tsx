@@ -42,6 +42,28 @@ const xavierFrames = [
   'Tenshi-Akuma-1-1.png', 'Tenshi-Akuma-1-2.png', 'Tenshi-Akuma-1-3.png', 'Tenshi-Akuma-1-4.png', 'Tenshi-Akuma-1-5.png', 'Tenshi-Akuma-1-6.png'
 ]
 
+// Function to preload additional frames for smooth animation
+const preloadAnimationFrames = (frames: string[], characterName: string, setPreloadedFrames: React.Dispatch<React.SetStateAction<Set<string>>>, preloadedFrames: Set<string>) => {
+  console.log(`📦 Preloading additional frames for ${characterName}`)
+  
+  // Preload first 3 frames for smooth start
+  const framesToPreload = frames.slice(0, 3)
+  
+  framesToPreload.forEach(frame => {
+    if (preloadedFrames.has(frame)) return
+    
+    const img = document.createElement('img')
+    img.onload = () => {
+      setPreloadedFrames(prev => new Set([...prev, frame]))
+      console.log(`✨ Preloaded additional frame: ${frame}`)
+    }
+    img.onerror = () => {
+      console.warn(`❌ Failed to preload additional frame: ${frame}`)
+    }
+    img.src = `/${frame}`
+  })
+}
+
 export default function Home() {
   const [currentFrame, setCurrentFrame] = useState(0)
 
@@ -74,7 +96,6 @@ export default function Home() {
 
   // Preloading state
   const [preloadedFrames, setPreloadedFrames] = useState<Set<string>>(new Set())
-  const [isPreloadingComplete, setIsPreloadingComplete] = useState(false)
 
   // Preload critical frames on page load
   useEffect(() => {
@@ -105,7 +126,6 @@ export default function Home() {
           loadedCount++
           if (loadedCount === totalFrames) {
             console.log('🎉 Critical frame preloading complete!')
-            setIsPreloadingComplete(true)
           }
         }
         img.onerror = () => {
@@ -113,7 +133,6 @@ export default function Home() {
           loadedCount++
           if (loadedCount === totalFrames) {
             console.log('🎉 Critical frame preloading complete!')
-            setIsPreloadingComplete(true)
           }
         }
         img.src = `/${frame}`
@@ -123,27 +142,7 @@ export default function Home() {
     preloadImages()
   }, [])
 
-  // Function to preload additional frames for smooth animation
-  const preloadAnimationFrames = (frames: string[], characterName: string) => {
-    console.log(`📦 Preloading additional frames for ${characterName}`)
-    
-    // Preload first 3 frames for smooth start
-    const framesToPreload = frames.slice(0, 3)
-    
-    framesToPreload.forEach(frame => {
-      if (preloadedFrames.has(frame)) return
-      
-      const img = document.createElement('img')
-      img.onload = () => {
-        setPreloadedFrames(prev => new Set([...prev, frame]))
-        console.log(`✨ Preloaded additional frame: ${frame}`)
-      }
-      img.onerror = () => {
-        console.warn(`❌ Failed to preload additional frame: ${frame}`)
-      }
-      img.src = `/${frame}`
-    })
-  }
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -151,7 +150,7 @@ export default function Home() {
     }, 100) // 10fps = 100ms per frame
 
     return () => clearInterval(interval)
-  }, [frames.length])
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -159,7 +158,7 @@ export default function Home() {
     }, 120) // 8fps = 120ms per frame
 
     return () => clearInterval(interval)
-  }, [titleFrames.length])
+  }, [])
 
   // Refs for intersection observer
   const potatoRef = useRef(null)
@@ -211,7 +210,7 @@ export default function Home() {
         if (target === potatoRef.current) {
           console.log(`🥬 くさ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(potatoFrames, 'くさ')
+            preloadAnimationFrames(potatoFrames, 'くさ', setPreloadedFrames, preloadedFrames)
             startAnimation('potato', setCurrentPotatoFrame, potatoFrames, 20)
           } else {
             stopAnimation('potato')
@@ -219,7 +218,7 @@ export default function Home() {
         } else if (target === nikiRef.current) {
           console.log(`💪 ニキ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(nikiFrames, 'ニキ')
+            preloadAnimationFrames(nikiFrames, 'ニキ', setPreloadedFrames, preloadedFrames)
             startAnimation('niki', setCurrentNikiFrame, nikiFrames, 30)
           } else {
             stopAnimation('niki')
@@ -227,7 +226,7 @@ export default function Home() {
         } else if (target === yanuRef.current) {
           console.log(`🐱 ヤヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(yanuFrames, 'ヤヌ')
+            preloadAnimationFrames(yanuFrames, 'ヤヌ', setPreloadedFrames, preloadedFrames)
             startAnimation('yanu', setCurrentYanuFrame, yanuFrames, 20)
           } else {
             stopAnimation('yanu')
@@ -235,7 +234,7 @@ export default function Home() {
         } else if (target === inuRef.current) {
           console.log(`🐕 イヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(inuFrames, 'イヌ')
+            preloadAnimationFrames(inuFrames, 'イヌ', setPreloadedFrames, preloadedFrames)
             startAnimation('inu', setCurrentInuFrame, inuFrames, 24)
           } else {
             stopAnimation('inu')
@@ -243,7 +242,7 @@ export default function Home() {
         } else if (target === kochoRef.current) {
           console.log(`🏫 校長: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(kochoFrames, '校長')
+            preloadAnimationFrames(kochoFrames, '校長', setPreloadedFrames, preloadedFrames)
             startAnimation('kocho', setCurrentKochoFrame, kochoFrames, 20)
           } else {
             stopAnimation('kocho')
@@ -251,7 +250,7 @@ export default function Home() {
         } else if (target === mobRef.current) {
           console.log(`👤 モブ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(mobFrames, 'モブ')
+            preloadAnimationFrames(mobFrames, 'モブ', setPreloadedFrames, preloadedFrames)
             startAnimation('mob', setCurrentMobFrame, mobFrames, 20)
           } else {
             stopAnimation('mob')
@@ -259,7 +258,7 @@ export default function Home() {
         } else if (target === xavierRef.current) {
           console.log(`👼 ザビエル・ハエ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
           if (isVisible) {
-            preloadAnimationFrames(xavierFrames, 'ザビエル・ハエ')
+            preloadAnimationFrames(xavierFrames, 'ザビエル・ハエ', setPreloadedFrames, preloadedFrames)
             startAnimation('xavier', setCurrentXavierFrame, xavierFrames, 24)
           } else {
             stopAnimation('xavier')
@@ -311,7 +310,7 @@ export default function Home() {
       }
       Object.values(currentIntervals).forEach(interval => clearInterval(interval))
     }
-  }, [potatoFrames.length, nikiFrames.length, yanuFrames.length, inuFrames.length, kochoFrames.length, mobFrames.length, xavierFrames.length])
+  }, [])
 
   useEffect(() => {
     let ticking = false
@@ -333,7 +332,7 @@ export default function Home() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [spinFrames.length])
+  }, [])
 
   return (
     <>
