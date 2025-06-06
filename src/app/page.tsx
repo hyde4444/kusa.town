@@ -61,7 +61,7 @@ export default function Home() {
   const characters = useMemo(() => [
     {
       name: 'くさ',
-      video: 'kusa-potato-1_comp.mp4',
+      video: 'kusa-don-1_comp.mp4',
       thumbnail: potatoFrames[0],
       descriptions: [
         'くいしんぼう（デブ）',
