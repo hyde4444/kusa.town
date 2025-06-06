@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 // Frame arrays moved outside component to prevent recreation on every render
 const frames = ['header2_1_t1.png', 'header2_2_t1.png', 'header2_3_t1.png']
@@ -73,29 +73,105 @@ export default function Home() {
   // Spinning Kusa Animation
   const [currentSpinFrame, setCurrentSpinFrame] = useState(0)
 
-  // Kusa Potato Animation  
-  const [currentPotatoFrame, setCurrentPotatoFrame] = useState(0)
-
-  // Niki Fly Animation
-  const [currentNikiFrame, setCurrentNikiFrame] = useState(0)
-
-  // Yanu Walk Animation
-  const [currentYanuFrame, setCurrentYanuFrame] = useState(0)
-
-  // Inu Run Animation
-  const [currentInuFrame, setCurrentInuFrame] = useState(0)
-
-  // Kocho Camera Animation
-  const [currentKochoFrame, setCurrentKochoFrame] = useState(0)
-
-  // Mobu Clap Animation
-  const [currentMobFrame, setCurrentMobFrame] = useState(0)
-
-  // Xavier Frame Animation
-  const [currentXavierFrame, setCurrentXavierFrame] = useState(0)
+  // Character Gallery State
+  const [selectedCharacter, setSelectedCharacter] = useState(0) // Index of selected character
+  const [currentCharacterFrame, setCurrentCharacterFrame] = useState(0)
 
   // Preloading state
   const [preloadedFrames, setPreloadedFrames] = useState<Set<string>>(new Set())
+
+  // Character configuration - memoized to prevent recreation
+  const characters = useMemo(() => [
+    {
+      name: 'くさ',
+      frames: potatoFrames,
+      fps: 20,
+      descriptions: [
+        'くいしんぼう（デブ）',
+        'あほ',
+        'ザコ',
+        '急停',
+        '法はかでチョロい',
+        '忍耐力（防御力）が異常に高い'
+      ]
+    },
+    {
+      name: 'ニキ',
+      frames: nikiFrames,
+      fps: 30,
+      descriptions: [
+        '超絶ムキムキ',
+        '銀河系最強の戦闘能力',
+        '振る舞いがオトメ',
+        '心優しく正義心が強い',
+        'くさを友達だと思っている',
+        'くさに痩せてほしい',
+        '力加減を知らない',
+        'くさと同級生'
+      ]
+    },
+    {
+      name: 'ヤヌ',
+      frames: yanuFrames,
+      fps: 20,
+      descriptions: [
+        'くさのペット',
+        '姑息で狡猾',
+        '人間界出身',
+        '語尾に「にゃ」をつけたがる',
+        'ニキにライバル心を抱いている',
+        'しっぽがある',
+        'くさの同級生'
+      ]
+    },
+    {
+      name: 'イヌ',
+      frames: inuFrames,
+      fps: 24,
+      descriptions: [
+        'ニキに命を救われた',
+        'バキバキに筋肉をつけようとしている',
+        'ニキを尊敬している',
+        '真面目',
+        '努力家',
+        'ニキには感謝している',
+        'くさの同級生'
+      ]
+    },
+    {
+      name: '校長',
+      frames: kochoFrames,
+      fps: 20,
+      descriptions: [
+        'テキトー',
+        '金持ち',
+        'ノリがいい',
+        '趣味は写真',
+        'くさ達の学校の校長'
+      ]
+    },
+    {
+      name: 'ザビエル・ハエ',
+      frames: xavierFrames,
+      fps: 24,
+      descriptions: [
+        '天使と悪魔ぽく登場したが一般人',
+        '実は普通',
+        '空気が読めない',
+        '天然',
+        '優しい',
+        'くさの同級生'
+      ]
+    },
+    {
+      name: 'モブ',
+      frames: mobFrames,
+      fps: 20,
+      descriptions: [
+        'モブキャラ'
+      ]
+    }
+  ], [])
 
   // Preload critical frames on page load
   useEffect(() => {
@@ -160,157 +236,39 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Refs for intersection observer
-  const potatoRef = useRef(null)
-  const nikiRef = useRef(null)
-  const yanuRef = useRef(null)
-  const inuRef = useRef(null)
-  const kochoRef = useRef(null)
-  const mobRef = useRef(null)
-  const xavierRef = useRef(null)
-
-  // Animation intervals storage
-  const intervalsRef = useRef<Record<string, NodeJS.Timeout>>({})
-
-  // Character animation control
+  // Selected character animation
   useEffect(() => {
-    const startAnimation = (name: string, setter: (fn: (prev: number) => number) => void, frames: string[], fps: number) => {
-      if (intervalsRef.current[name]) {
-        console.log(`🔄 ${name} animation already running - skipping start`)
-        return // Already running
-      }
-      
-      console.log(`🎬 Starting animation for ${name} at ${fps}fps`)
-      const interval = setInterval(() => {
-        setter((prev: number) => (prev + 1) % frames.length)
-      }, 1000 / fps)
-      
-      intervalsRef.current[name] = interval
-    }
+    const selectedChar = characters[selectedCharacter]
+    if (!selectedChar) return
 
-    const stopAnimation = (name: string) => {
-      if (intervalsRef.current[name]) {
-        console.log(`⏹️ Stopping animation for ${name}`)
-        clearInterval(intervalsRef.current[name])
-        delete intervalsRef.current[name]
-      } else {
-        console.log(`❌ ${name} animation already stopped`)
-      }
-    }
-
-    // Intersection Observer
-    const observer = new IntersectionObserver((entries) => {
-      console.log(`👀 Intersection Observer triggered for ${entries.length} entries`)
-      
-      entries.forEach(entry => {
-        const target = entry.target
-        const isVisible = entry.isIntersecting
-        const ratio = Math.round(entry.intersectionRatio * 100)
-
-        if (target === potatoRef.current) {
-          console.log(`🥬 くさ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(potatoFrames, 'くさ', setPreloadedFrames, preloadedFrames)
-            startAnimation('potato', setCurrentPotatoFrame, potatoFrames, 20)
-          } else {
-            stopAnimation('potato')
-          }
-        } else if (target === nikiRef.current) {
-          console.log(`💪 ニキ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(nikiFrames, 'ニキ', setPreloadedFrames, preloadedFrames)
-            startAnimation('niki', setCurrentNikiFrame, nikiFrames, 30)
-          } else {
-            stopAnimation('niki')
-          }
-        } else if (target === yanuRef.current) {
-          console.log(`🐱 ヤヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(yanuFrames, 'ヤヌ', setPreloadedFrames, preloadedFrames)
-            startAnimation('yanu', setCurrentYanuFrame, yanuFrames, 20)
-          } else {
-            stopAnimation('yanu')
-          }
-        } else if (target === inuRef.current) {
-          console.log(`🐕 イヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(inuFrames, 'イヌ', setPreloadedFrames, preloadedFrames)
-            startAnimation('inu', setCurrentInuFrame, inuFrames, 24)
-          } else {
-            stopAnimation('inu')
-          }
-        } else if (target === kochoRef.current) {
-          console.log(`🏫 校長: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(kochoFrames, '校長', setPreloadedFrames, preloadedFrames)
-            startAnimation('kocho', setCurrentKochoFrame, kochoFrames, 20)
-          } else {
-            stopAnimation('kocho')
-          }
-        } else if (target === mobRef.current) {
-          console.log(`👤 モブ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(mobFrames, 'モブ', setPreloadedFrames, preloadedFrames)
-            startAnimation('mob', setCurrentMobFrame, mobFrames, 20)
-          } else {
-            stopAnimation('mob')
-          }
-        } else if (target === xavierRef.current) {
-          console.log(`👼 ザビエル・ハエ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          if (isVisible) {
-            preloadAnimationFrames(xavierFrames, 'ザビエル・ハエ', setPreloadedFrames, preloadedFrames)
-            startAnimation('xavier', setCurrentXavierFrame, xavierFrames, 24)
-          } else {
-            stopAnimation('xavier')
-          }
-        }
-      })
-    }, { 
-      threshold: 0.1, // Start animation when 10% visible
-      rootMargin: '300px' // Start preloading 300px before entering viewport for aggressive preloading
-    })
-
-    // Observe all character elements
-    const refs = [potatoRef, nikiRef, yanuRef, inuRef, kochoRef, mobRef, xavierRef]
-    const characterNames = ['くさ', 'ニキ', 'ヤヌ', 'イヌ', '校長', 'モブ', 'ザビエル・ハエ']
+    console.log(`🎬 Starting animation for ${selectedChar.name} at ${selectedChar.fps}fps`)
     
-    console.log('🔍 Setting up Intersection Observer for characters...')
-    refs.forEach((ref, index) => {
-      if (ref.current) {
-        observer.observe(ref.current)
-        console.log(`✅ Observing ${characterNames[index]}`)
-      } else {
-        console.log(`❌ Failed to observe ${characterNames[index]} - ref not ready`)
-      }
-    })
-
-    // Add a way to check current animation status
-    if (typeof window !== 'undefined') {
-      (window as typeof window & { getAnimationStatus: () => { active: number; running: string[] } }).getAnimationStatus = () => {
-        const activeAnimations = Object.keys(intervalsRef.current)
-        console.log(`📊 Animation Status Report:`)
-        console.log(`🎬 Active animations: ${activeAnimations.length}`)
-        if (activeAnimations.length > 0) {
-          console.log(`📝 Running: ${activeAnimations.join(', ')}`)
-        } else {
-          console.log(`😴 No animations running`)
-        }
-        return { active: activeAnimations.length, running: activeAnimations }
-      }
-    }
+    // Preload frames for the selected character IMMEDIATELY
+    preloadAnimationFrames(selectedChar.frames, selectedChar.name, setPreloadedFrames, preloadedFrames)
+    
+    // Start animation immediately without waiting
+    const interval = setInterval(() => {
+      setCurrentCharacterFrame(prev => (prev + 1) % selectedChar.frames.length)
+    }, 1000 / selectedChar.fps)
 
     return () => {
-      console.log('🧹 Cleaning up Intersection Observer and animations...')
-      observer.disconnect()
-      // Clean up all intervals
-      const currentIntervals = intervalsRef.current
-      const activeAnimations = Object.keys(currentIntervals)
-      if (activeAnimations.length > 0) {
-        console.log(`🛑 Stopping ${activeAnimations.length} active animations: ${activeAnimations.join(', ')}`)
-      }
-      Object.values(currentIntervals).forEach(interval => clearInterval(interval))
+      console.log(`⏹️ Stopping animation for ${selectedChar.name}`)
+      clearInterval(interval)
     }
-  }, [])
+  }, [selectedCharacter, characters])
+
+  // Handle character selection - optimized for immediate response
+  const handleCharacterSelect = (index: number) => {
+    console.log(`👆 Selected character: ${characters[index].name}`)
+    
+    // Preload the new character's frames immediately before switching
+    const newChar = characters[index]
+    preloadAnimationFrames(newChar.frames, newChar.name, setPreloadedFrames, preloadedFrames)
+    
+    // Set both the character and frame simultaneously 
+    setSelectedCharacter(index)
+    setCurrentCharacterFrame(0)
+  }
 
   useEffect(() => {
     let ticking = false
@@ -478,334 +436,89 @@ export default function Home() {
               キャラクター
             </h1>
             
-            {/* Characters Stack */}
-            <div className="flex flex-col items-center gap-6 sm:gap-8 lg:gap-12">
+            {/* Character Gallery */}
+            <div className="flex flex-col items-center gap-8 sm:gap-12 lg:gap-16">
               
-              {/* 1. くさ */}
+              {/* Character Thumbnails */}
+              <div className="w-full max-w-4xl">
+                <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-7 gap-2 sm:gap-3 lg:gap-4 justify-items-center">
+                  {characters.map((character, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleCharacterSelect(index)}
+                      className={`relative group transition-all duration-300 rounded-2xl overflow-hidden border-0 outline-0 ${
+                        selectedCharacter === index 
+                          ? 'scale-110 shadow-2xl shadow-green-400/40 bg-gradient-to-br from-green-100 to-green-200' 
+                          : 'hover:scale-105 shadow-lg hover:shadow-xl bg-transparent hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100'
+                      }`}
+                      style={{ border: 'none', outline: 'none', background: selectedCharacter === index ? '' : 'transparent' }}
+                    >
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 p-2">
+                        <Image
+                          src={`/${character.frames[0]}`}
+                          alt={`${character.name} thumbnail`}
+                          width={64}
+                          height={64}
+                          className="w-full h-full object-contain"
+                          loading="eager"
+                        />
+                      </div>
+                      
+                      {/* Selection indicator */}
+                      {selectedCharacter === index && (
+                        <div className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center shadow-lg">
+                          <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                        </div>
+                      )}
+                      
+
+                    </button>
+                  ))}
+                </div>
+                <div className="text-center mt-3 text-xs text-gray-500 font-medium">
+                  タップして選択
+                </div>
+              </div>
+
+              {/* Selected Character Animation & Info */}
               <div className="w-full flex justify-center">
-                <div ref={potatoRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 lg:gap-12 w-full max-w-5xl bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl shadow-gray-200/50">
+                  
+                  {/* Large Animation Area */}
                   <div className="flex-shrink-0">
-                    <Image
-                      src={`/${potatoFrames[currentPotatoFrame]}`}
-                      alt="くさ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
+                    <div className="relative">
+                      <Image
+                        src={`/${characters[selectedCharacter].frames[currentCharacterFrame]}`}
+                        alt={`${characters[selectedCharacter].name} animation`}
+                        width={300}
+                        height={300}
+                        className="object-contain sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px]"
+                        priority
+                      />
+
+                    </div>
                   </div>
+
+                  {/* Character Information */}
                   <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      くさ
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black mb-4 sm:mb-6 lg:mb-8 text-gray-800">
+                      {characters[selectedCharacter].name}
                     </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くいしんぼう（デブ）</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>あほ</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ザコ</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>急停</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>法はかでチョロい</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>忍耐力（防御力）が異常に高い</span>
-                        </li>
+                    <div className="bg-gradient-to-br from-green-50/80 to-green-100/50 rounded-2xl p-4 sm:p-6 lg:p-8 backdrop-blur-sm">
+                      <ul className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed space-y-3 sm:space-y-4">
+                        {characters[selectedCharacter].descriptions.map((description, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="text-green-500 font-bold mr-3 sm:mr-4 flex-shrink-0 text-lg">✦</span>
+                            <span>{description}</span>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* 2. ニキ */}
-              <div className="w-full flex justify-center">
-                <div ref={nikiRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={`/${nikiFrames[currentNikiFrame]}`}
-                      alt="ニキ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      ニキ
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>超絶ムキムキ</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>銀河系最強の戦闘能力</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>振る舞いがオトメ</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>心優しく正義心が強い</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさを友達だと思っている</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさに痩せてほしい</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>力加減を知らない</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさと同級生</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 3. ヤヌ */}
-              <div className="w-full flex justify-center">
-                <div ref={yanuRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={`/${yanuFrames[currentYanuFrame]}`}
-                      alt="ヤヌ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      ヤヌ
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさのペット</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>姑息で狡猾</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>人間界出身</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>語尾に「にゃ」をつけたがる</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ニキにライバル心を抱いている</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>しっぽがある</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさの同級生</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 4. イヌ */}
-              <div className="w-full flex justify-center">
-                <div ref={inuRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={`/${inuFrames[currentInuFrame]}`}
-                      alt="イヌ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      イヌ
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ニキに命を救われた</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>バキバキに筋肉をつけようとしている</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ニキを尊敬している</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>真面目</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>努力家</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさの同級生</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 5. コチョ */}
-              <div className="w-full flex justify-center">
-                <div ref={kochoRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={`/${kochoFrames[currentKochoFrame]}`}
-                      alt="コチョ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      校長
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>テキトー</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>金持ち</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>ノリがいい</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>趣味は写真</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさ達の学校の校長</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 6. ザビエル・ハエ */}
-              <div className="w-full flex justify-center">
-                <div ref={xavierRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-                    <Image
-                      src={`/${xavierFrames[currentXavierFrame]}`}
-                      alt="ザビエル・ハエ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      ザビエル・ハエ
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>天使と悪魔ぽく登場したが一般人</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>実は普通</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>空気が読めない</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>天然</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>優しい</span>
-                        </li>
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>くさの同級生</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 7. モブ */}
-              <div className="w-full flex justify-center">
-                <div ref={mobRef} className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
-                  <div className="flex-shrink-0">
-          <Image
-                      src={`/${mobFrames[currentMobFrame]}`}
-                      alt="モブ character"
-                      width={200}
-                      height={200}
-                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
-                      モブ
-                    </h2>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
-                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
-                        <li className="flex items-start">
-                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
-                          <span>モブキャラ</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
+
           </div>
         </section>
         
