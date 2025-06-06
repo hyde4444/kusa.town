@@ -56,13 +56,15 @@ export default function Home() {
 
   // Character Gallery State
   const [selectedCharacter, setSelectedCharacter] = useState(0) // Index of selected character
+  const [currentCharacterFrame, setCurrentCharacterFrame] = useState(0)
 
-  // Character configuration - memoized to prevent recreation  
+  // Character configuration - ORIGINAL FPS RESTORED
   const characters = useMemo(() => [
     {
       name: 'くさ',
-      video: 'kusa-potato-1_comp.mp4',
-      thumbnail: potatoFrames[0], // Keep first frame for thumbnail
+      frames: potatoFrames,
+      fps: 20, // ORIGINAL FPS
+      thumbnail: potatoFrames[0],
       descriptions: [
         'くいしんぼう（デブ）',
         'あほ',
@@ -74,7 +76,8 @@ export default function Home() {
     },
     {
       name: 'ニキ',
-      video: 'Niki-fly-1_comp.mp4',
+      frames: nikiFrames,
+      fps: 30, // ORIGINAL FPS
       thumbnail: nikiFrames[0],
       descriptions: [
         '超絶ムキムキ',
@@ -89,7 +92,8 @@ export default function Home() {
     },
     {
       name: 'ヤヌ',
-      video: 'Yanu-walk-1_comp.mp4',
+      frames: yanuFrames,
+      fps: 20, // ORIGINAL FPS
       thumbnail: yanuFrames[0],
       descriptions: [
         'くさのペット',
@@ -103,7 +107,8 @@ export default function Home() {
     },
     {
       name: 'イヌ',
-      video: 'inu-run-1_comp.mp4',
+      frames: inuFrames,
+      fps: 24, // ORIGINAL FPS  
       thumbnail: inuFrames[0],
       descriptions: [
         'ニキに命を救われた',
@@ -117,7 +122,8 @@ export default function Home() {
     },
     {
       name: '校長',
-      video: 'kocho-camera-1_comp.mp4',
+      frames: kochoFrames,
+      fps: 20, // ORIGINAL FPS
       thumbnail: kochoFrames[0],
       descriptions: [
         'テキトー',
@@ -129,7 +135,8 @@ export default function Home() {
     },
     {
       name: 'ザビエル・ハエ',
-      video: 'Tenshi-Akuma-1_comp.mp4',
+      frames: xavierFrames,
+      fps: 24, // ORIGINAL FPS
       thumbnail: xavierFrames[0],
       descriptions: [
         '天使と悪魔ぽく登場したが一般人',
@@ -142,7 +149,8 @@ export default function Home() {
     },
     {
       name: 'モブ',
-      video: 'mobu-clap-1_comp.mp4',
+      frames: mobFrames,
+      fps: 20, // ORIGINAL FPS
       thumbnail: mobFrames[0],
       descriptions: [
         'モブキャラ'
@@ -170,10 +178,28 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Handle character selection - simplified for video
+  // Character animation effect - optimized for single character
+  useEffect(() => {
+    const selectedChar = characters[selectedCharacter]
+    if (!selectedChar) return
+
+    console.log(`🎬 Starting optimized animation for ${selectedChar.name} at ${selectedChar.fps}fps`)
+    
+    const interval = setInterval(() => {
+      setCurrentCharacterFrame(prev => (prev + 1) % selectedChar.frames.length)
+    }, 1000 / selectedChar.fps)
+
+    return () => {
+      console.log(`⏹️ Stopping animation for ${selectedChar.name}`)
+      clearInterval(interval)
+    }
+  }, [selectedCharacter, characters])
+
+  // Handle character selection - optimized
   const handleCharacterSelect = (index: number) => {
     console.log(`👆 Selected character: ${characters[index].name}`)
     setSelectedCharacter(index)
+    setCurrentCharacterFrame(0) // Reset to first frame
   }
 
   useEffect(() => {
@@ -394,18 +420,15 @@ export default function Home() {
                   {/* Large Animation Area */}
                   <div className="flex-shrink-0">
                     <div className="relative">
-                      <video
-                        key={selectedCharacter} // Force remount when character changes
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
+                      <img
+                        src={`/${characters[selectedCharacter].frames[currentCharacterFrame]}`}
+                        alt={`${characters[selectedCharacter].name} animation`}
                         width={300}
                         height={300}
                         className="object-contain sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px]"
-                      >
-                        <source src={`/${characters[selectedCharacter].video}`} type="video/mp4" />
-                      </video>
+                        loading="eager"
+                        draggable={false}
+                      />
 
                     </div>
                   </div>
