@@ -65,9 +65,18 @@ export default function Home() {
   ]
 
   // Mobu Clap Animation
-  const [currentMobuFrame, setCurrentMobuFrame] = useState(0)
-  const mobuFrames = [
+  const [currentMobFrame, setCurrentMobFrame] = useState(0)
+  const mobFrames = [
     'Mobu-clap-1-1.png', 'Mobu-clap-1-2.png', 'Mobu-clap-1-3.png'
+  ]
+
+  // Xavier Frame Animation
+  const [currentXavierFrame, setCurrentXavierFrame] = useState(0)
+  const xavierFrames = [
+    'Xavier-1-1.png', 'Xavier-1-2.png', 'Xavier-1-3.png', 'Xavier-1-4.png', 'Xavier-1-5.png',
+    'Xavier-1-6.png', 'Xavier-1-7.png', 'Xavier-1-8.png', 'Xavier-1-9.png', 'Xavier-1-10.png',
+    'Xavier-1-11.png', 'Xavier-1-12.png', 'Xavier-1-13.png', 'Xavier-1-14.png', 'Xavier-1-15.png',
+    'Xavier-1-16.png', 'Xavier-1-17.png', 'Xavier-1-18.png', 'Xavier-1-19.png', 'Xavier-1-20.png'
   ]
 
   useEffect(() => {
@@ -136,11 +145,19 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentMobuFrame((prev) => (prev + 1) % mobuFrames.length)
+      setCurrentMobFrame((prev) => (prev + 1) % mobFrames.length)
     }, 50) // 5fps = 200ms per frame (slower for 3 frames)
 
     return () => clearInterval(interval)
-  }, [mobuFrames.length])
+  }, [mobFrames.length])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentXavierFrame((prev) => (prev + 1) % xavierFrames.length)
+    }, 42) // 24fps = 42ms per frame
+
+    return () => clearInterval(interval)
+  }, [xavierFrames.length])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -167,42 +184,42 @@ export default function Home() {
           left: 0,
           right: 0,
           zIndex: 9999,
-          height: '128px'
+          height: '100px'
         }}
       >
         {/* Animated Frame Images */}
         <div className="absolute inset-0 w-full h-full">
-        <Image
+          <Image
             src={`/${frames[currentFrame]}`}
             alt="Header animation"
             fill
             style={{
               objectFit: 'cover'
             }}
-          priority
-        />
+            priority
+          />
         </div>
 
         {/* Header Content Container */}
-        <div className="relative z-10 h-full flex items-center justify-between px-8">
+        <div className="relative z-10 h-full flex items-center justify-between px-4 sm:px-6 md:px-8">
           
-          {/* Left Spacer to balance the right-side icons */}
-          <div style={{ width: '176px' }} />
+          {/* Left Spacer to balance the right-side icons - hidden on mobile */}
+          <div className="hidden sm:block" style={{ width: '120px' }} />
 
           {/* Centered Logo/Title */}
           <div className="flex-shrink-0">
             <Image
               src={`/${titleFrames[currentTitleFrame]}`}
               alt="Drinkable Kusa Logo"
-              width={200}
-              height={60}
-              className="object-contain"
+              width={150}
+              height={45}
+              className="object-contain sm:w-[180px] sm:h-[54px] md:w-[200px] md:h-[60px]"
               priority
             />
           </div>
 
           {/* Right Side - Navigation Icons */}
-          <div className="flex items-center justify-end gap-4" style={{ width: '176px' }}>
+          <div className="flex items-center justify-end gap-2 sm:gap-3" style={{ width: '120px' }}>
             {/* LINE Icon */}
             <a 
               href="#" 
@@ -210,13 +227,13 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
-                width: '48px',
-                height: '48px',
-                padding: '12px'
+                width: '36px',
+                height: '36px',
+                padding: '8px'
               }}
               aria-label="LINE"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="sm:w-[22px] sm:h-[22px] md:w-[24px] md:h-[24px]">
                 <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" fill="white"/>
               </svg>
             </a>
@@ -228,13 +245,13 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
-                width: '48px',
-                height: '48px',
-                padding: '12px'
+                width: '36px',
+                height: '36px',
+                padding: '8px'
               }}
               aria-label="Store"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="sm:w-[22px] sm:h-[22px] md:w-[24px] md:h-[24px]">
                 <path d="M7 18C5.9 18 5 18.9 5 20S5.9 22 7 22 9 21.1 9 20 8.1 18 7 18ZM1 2V4H3L6.6 11.59L5.24 14.04C5.09 14.32 5 14.65 5 15C5 16.1 5.9 17 7 17H19V15H7.42C7.28 15 7.17 14.89 7.17 14.75L7.2 14.63L8.1 13H15.55C16.3 13 16.96 12.58 17.3 11.97L20.88 5H5.21L4.27 3H1ZM17 18C15.9 18 15 18.9 15 20S15.9 22 17 22 19 21.1 19 20 18.1 18 17 18Z" fill="white"/>
               </svg>
             </a>
@@ -246,13 +263,13 @@ export default function Home() {
               rel="noopener noreferrer"
               className="bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
               style={{
-                width: '48px',
-                height: '48px',
-                padding: '12px'
+                width: '36px',
+                height: '36px',
+                padding: '8px'
               }}
               aria-label="YouTube"
             >
-              <svg width="24" height="17" viewBox="0 0 24 17" fill="none">
+              <svg width="20" height="15" viewBox="0 0 24 17" fill="none" className="sm:w-[22px] sm:h-[16px] md:w-[24px] md:h-[17px]">
                 <path d="M23.498 2.686a3.016 3.016 0 0 0-2.122-2.136C19.505 0.045 12 0.045 12 0.045s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 2.686C0 4.57 0 8.5 0 8.5s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 12.43 24 8.5 24 8.5s0-3.93-.502-5.814z" fill="#FFFFFF"/>
                 <path d="M9.545 12.068V4.932L15.818 8.5l-6.273 3.568z" fill="#FF0000"/>
               </svg>
@@ -261,23 +278,20 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="min-h-screen" style={{paddingTop: '0px'}}>
+      <main className="min-h-screen" style={{paddingTop: '100px'}}>
         {/* Hero Section */}
-        <section style={{height: '1080px', backgroundColor: '#FFFFFF', marginTop: '0px', position: 'relative', overflow: 'hidden'}}>
-          {/* Background Video - Fixed Size */}
+        <section className="relative bg-white overflow-hidden" style={{
+          height: 'calc(100vh - 100px)',
+          minHeight: '400px'
+        }}>
+          {/* Background Video - Responsive */}
           <video
             autoPlay
             muted
             loop
             playsInline
+            className="absolute top-0 left-0 w-full h-full object-cover sm:object-contain"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '1920px',
-              height: '1080px',
-              // objectFit: 'contain',
-              objectPosition: 'center top',
               zIndex: 0
             }}
           >
@@ -285,125 +299,63 @@ export default function Home() {
           </video>
           
           {/* Content overlay */}
-          <div className="relative z-10 flex items-center justify-between w-full h-full px-8 md:px-16 lg:px-24">
-            <div className="flex-1">
-              {/* <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-black">
-                ドリンカブル🥬
-              </h1> */}
-            </div>
-            <div className="flex-1 flex justify-center items-center">
-              <div className="relative">
-                {/* <Image
-                  src="/kusa_run.png"
-                  alt="くさ character"
-                  width={400}
-                  height={400}
-                  className="object-contain"
-                /> */}
-              </div>
+          <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-8 md:px-16 lg:px-24">
+            <div className="text-center">
+              {/* Hero content can go here if needed */}
             </div>
           </div>
         </section>
 
-        {/* Character Description Section - Simple White Background */}
-        <section style={{
-          backgroundColor: '#FFFFFF',
-          minHeight: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '2rem',
-          paddingBottom: '200px'
-        }}>
-          <div style={{
-            maxWidth: '1200px',
-            width: '100%'
-          }}>
-            <h1 style={{
-              fontSize: '4rem',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              marginBottom: '3rem',
-              color: 'black'
-            }}>キャラクター</h1>
+        {/* Character Description Section - Responsive */}
+        <section className="bg-white min-h-screen flex justify-center items-center px-4 sm:px-6 lg:px-8 pb-32 sm:pb-40 lg:pb-48">
+          <div className="max-w-6xl w-full">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-8 sm:mb-12 lg:mb-16 text-black">
+              キャラクター
+            </h1>
             
             {/* Characters Stack */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '4rem'
-            }}>
+            <div className="flex flex-col items-center gap-6 sm:gap-8 lg:gap-12">
               
               {/* 1. くさ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
                     <Image
                       src={`/${potatoFrames[currentPotatoFrame]}`}
                       alt="くさ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>くさ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      くさ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>くいしんぼう（デブ）</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>あほ</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>ザコ</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>怠惰</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>浅はかでチョロい</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>忍耐力（防御力）が異常に高い</span>
                         </li>
                       </ul>
@@ -413,82 +365,53 @@ export default function Home() {
               </div>
 
               {/* 2. ニキ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
                     <Image
                       src={`/${nikiFrames[currentNikiFrame]}`}
                       alt="ニキ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>ニキ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      ニキ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>超絶ムキムキ</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>銀河系最強の戦闘能力</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>振る舞いがオトメ</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>心優しく正義心が強い</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>くさを友達だと思っている</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>くさに痩せてほしい</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>力加減を知らない</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
                           <span>くさと同級生</span>
                         </li>
                       </ul>
@@ -498,71 +421,50 @@ export default function Home() {
               </div>
 
               {/* 3. ヤヌ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
                     <Image
                       src={`/${yanuFrames[currentYanuFrame]}`}
                       alt="ヤヌ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>ヤヌ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>くさのペット</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      ヤヌ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>中性的</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>くさをペットだと思っている</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>知的</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>かなり頭が良い</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>冷静</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>姑息で狡猾</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>勉強が得意</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>世渡り上手</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>何かを隠している</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>正体不明</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>くさの同級生</span>
                         </li>
                       </ul>
                     </div>
@@ -570,137 +472,91 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 4. いぬ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
+              {/* 4. イヌ */}
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
                     <Image
                       src={`/${inuFrames[currentInuFrame]}`}
-                      alt="いぬ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      alt="イヌ character"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>いぬ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>ニキに命を救われた</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      イヌ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>いぬ</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>ニキの筋トレ教本でバキバキに</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>忠実</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>ニキの友達であるくさに興味津々</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>頭がいい</span>
                         </li>
-                        {/* <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>くさとニキに飼われていると思っている</span>
-                        </li> */}
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>人間界出身</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>くさが飼い主（実質主人）</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>足が速い</span>
+                        </li>
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* 5. ザビエル・ハエ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
+              {/* 5. コチョ */}
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
                     <Image
-                      src={`/${tenshiFrames[currentTenshiFrame]}`}
-                      alt="ザビエル・ハエ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      src={`/${kochoFrames[currentKochoFrame]}`}
+                      alt="コチョ character"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>ザビエル・ハエ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>天使と悪魔ぽく登場したが一般人</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      コチョ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>さっぱりしている</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>くさと同様ザコ</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>明るい</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>ザビエルはハゲを気にしている</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>つよい</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>ハエはハエであることを気にしている</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>写真家</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>くさの同級生</span>
                         </li>
                       </ul>
                     </div>
@@ -708,68 +564,59 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* 6. 校長 */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
-          <Image
-                      src={`/${kochoFrames[currentKochoFrame]}`}
-                      alt="校長 character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+              {/* 6. ザビエル・ハエ */}
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={`/${xavierFrames[currentXavierFrame]}`}
+                      alt="ザビエル・ハエ character"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>校長</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>くさとニキが通う学校の校長</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      ザビエル・ハエ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>天才少年</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>テキトー</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>ナルシスト</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>金持ち</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>中二病</span>
                         </li>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>お札の顔になっている</span>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>意識が高い</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>悪魔と天使が宿っている</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>人格が分裂気味</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>ゲームが得意</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>ゲームクリエイター志望</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>くさの同級生</span>
                         </li>
                       </ul>
                     </div>
@@ -778,55 +625,42 @@ export default function Home() {
               </div>
 
               {/* 7. モブ */}
-              <div style={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: '100%'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3rem',
-                  width: '800px',
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)'
-                }}>
-                  <div style={{flexShrink: 0}}>
-          <Image
-                      src={`/${mobuFrames[currentMobuFrame]}`}
+              <div className="w-full flex justify-center">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 lg:gap-8 w-full max-w-4xl bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+                  <div className="flex-shrink-0">
+                    <Image
+                      src={`/${mobFrames[currentMobFrame]}`}
                       alt="モブ character"
-                      width={300}
-                      height={300}
-                      className="object-contain"
+                      width={200}
+                      height={200}
+                      className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
                     />
                   </div>
-                  <div style={{flex: 1}}>
-                    <h2 style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '800',
-                      marginBottom: '1.5rem',
-                      color: '#1f2937',
-                      letterSpacing: '-0.025em'
-                    }}>モブ</h2>
-                    <div style={{
-                      backgroundColor: '#f8fafc',
-                      borderRadius: '12px',
-                      padding: '1.5rem'
-                    }}>
-                      <ul style={{
-                        fontSize: '1.25rem',
-                        color: '#374151',
-                        lineHeight: '1.8',
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 0
-                      }}>
-                        <li style={{marginBottom: '0.75rem', display: 'flex', alignItems: 'center'}}>
-                          <span style={{color: '#10b981', fontWeight: 'bold', marginRight: '0.75rem'}}>●</span>
-                          <span>モブキャラ</span>
+                  <div className="flex-1 text-center sm:text-left">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-3 sm:mb-4 lg:mb-6 text-gray-800">
+                      モブ
+                    </h2>
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 lg:p-6">
+                      <ul className="text-sm sm:text-base lg:text-lg text-gray-700 leading-relaxed space-y-2 sm:space-y-3">
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>どこにでもいそう</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>手をたたいて応援するのが好き</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>根っからの良い奴</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>地域の人気者</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 font-bold mr-2 sm:mr-3 flex-shrink-0">●</span>
+                          <span>年齢不詳（大人？子供？）</span>
                         </li>
                       </ul>
                     </div>
@@ -837,6 +671,66 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Spinning Character Section - Responsive */}
+        <section className="relative min-h-screen bg-white flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-8 sm:mb-12 lg:mb-16 text-black">
+              おまけ
+            </h2>
+            <div className="flex justify-center">
+              <Image
+                src={`/${spinFrames[currentSpinFrame]}`}
+                alt="Spinning Kusa"
+                width={200}
+                height={200}
+                className="object-contain sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px]"
+              />
+            </div>
+            <p className="mt-6 sm:mt-8 lg:mt-12 text-sm sm:text-base lg:text-lg text-gray-600 max-w-md mx-auto">
+              スクロールしてくさを回してみよう！
+            </p>
+          </div>
+        </section>
+
+        {/* Footer - Responsive */}
+        <footer className="bg-gray-900 text-white py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto text-center">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold mb-4 sm:mb-6">
+              ドリンカブル🥬
+            </h3>
+            <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">
+              くさとその仲間たちの冒険は続く...
+            </p>
+            <div className="flex justify-center space-x-4 sm:space-x-6">
+              <a 
+                href="#" 
+                className="text-green-400 hover:text-green-300 transition-colors text-sm sm:text-base"
+              >
+                LINE
+              </a>
+              <a 
+                href="#" 
+                className="text-blue-400 hover:text-blue-300 transition-colors text-sm sm:text-base"
+              >
+                Store
+              </a>
+              <a 
+                href="https://www.youtube.com/@drinkable_" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-red-400 hover:text-red-300 transition-colors text-sm sm:text-base"
+              >
+                YouTube
+              </a>
+            </div>
+            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-700">
+              <p className="text-xs sm:text-sm text-gray-400">
+                © 2024 Drinkable Kusa. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
       </main>
 
       {/* Fixed Footer with Upside Down Animation */}
