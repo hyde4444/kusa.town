@@ -56,14 +56,12 @@ export default function Home() {
 
   // Character Gallery State
   const [selectedCharacter, setSelectedCharacter] = useState(0) // Index of selected character
-  const [currentCharacterFrame, setCurrentCharacterFrame] = useState(0)
 
-  // Character configuration - ORIGINAL FPS RESTORED
+  // Character configuration - MP4 VIDEO APPROACH
   const characters = useMemo(() => [
     {
       name: 'くさ',
-      frames: potatoFrames,
-      fps: 20, // ORIGINAL FPS
+      video: 'kusa-potato-1_comp.mp4',
       thumbnail: potatoFrames[0],
       descriptions: [
         'くいしんぼう（デブ）',
@@ -76,8 +74,7 @@ export default function Home() {
     },
     {
       name: 'ニキ',
-      frames: nikiFrames,
-      fps: 30, // ORIGINAL FPS
+      video: 'Niki-fly-1_comp.mp4',
       thumbnail: nikiFrames[0],
       descriptions: [
         '超絶ムキムキ',
@@ -92,8 +89,7 @@ export default function Home() {
     },
     {
       name: 'ヤヌ',
-      frames: yanuFrames,
-      fps: 20, // ORIGINAL FPS
+      video: 'Yanu-walk-1_comp.mp4',
       thumbnail: yanuFrames[0],
       descriptions: [
         'くさのペット',
@@ -107,8 +103,7 @@ export default function Home() {
     },
     {
       name: 'イヌ',
-      frames: inuFrames,
-      fps: 24, // ORIGINAL FPS  
+      video: 'inu-run-1_comp.mp4',
       thumbnail: inuFrames[0],
       descriptions: [
         'ニキに命を救われた',
@@ -122,8 +117,7 @@ export default function Home() {
     },
     {
       name: '校長',
-      frames: kochoFrames,
-      fps: 20, // ORIGINAL FPS
+      video: 'kocho-camera-1_comp.mp4',
       thumbnail: kochoFrames[0],
       descriptions: [
         'テキトー',
@@ -135,8 +129,7 @@ export default function Home() {
     },
     {
       name: 'ザビエル・ハエ',
-      frames: xavierFrames,
-      fps: 24, // ORIGINAL FPS
+      video: 'Tenshi-Akuma-1_comp.mp4',
       thumbnail: xavierFrames[0],
       descriptions: [
         '天使と悪魔ぽく登場したが一般人',
@@ -149,8 +142,7 @@ export default function Home() {
     },
     {
       name: 'モブ',
-      frames: mobFrames,
-      fps: 20, // ORIGINAL FPS
+      video: 'mobu-clap-1_comp.mp4',
       thumbnail: mobFrames[0],
       descriptions: [
         'モブキャラ'
@@ -178,28 +170,10 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Character animation effect - optimized for single character
-  useEffect(() => {
-    const selectedChar = characters[selectedCharacter]
-    if (!selectedChar) return
-
-    console.log(`🎬 Starting optimized animation for ${selectedChar.name} at ${selectedChar.fps}fps`)
-    
-    const interval = setInterval(() => {
-      setCurrentCharacterFrame(prev => (prev + 1) % selectedChar.frames.length)
-    }, 1000 / selectedChar.fps)
-
-    return () => {
-      console.log(`⏹️ Stopping animation for ${selectedChar.name}`)
-      clearInterval(interval)
-    }
-  }, [selectedCharacter, characters])
-
-  // Handle character selection - optimized
+  // Handle character selection - video approach
   const handleCharacterSelect = (index: number) => {
     console.log(`👆 Selected character: ${characters[index].name}`)
     setSelectedCharacter(index)
-    setCurrentCharacterFrame(0) // Reset to first frame
   }
 
   useEffect(() => {
@@ -420,15 +394,19 @@ export default function Home() {
                   {/* Large Animation Area */}
                   <div className="flex-shrink-0">
                     <div className="relative">
-                      <img
-                        src={`/${characters[selectedCharacter].frames[currentCharacterFrame]}`}
-                        alt={`${characters[selectedCharacter].name} animation`}
+                      <video
+                        key={selectedCharacter}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
                         width={300}
                         height={300}
                         className="object-contain sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px]"
-                        loading="eager"
-                        draggable={false}
-                      />
+                      >
+                        <source src={`/${characters[selectedCharacter].video}`} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
 
                     </div>
                   </div>
