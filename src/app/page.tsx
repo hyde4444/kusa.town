@@ -1,3 +1,8 @@
+//do NOT change descriptions without my permission!!!
+//do NOT change descriptions without my permission!!!
+//do NOT change descriptions without my permission!!!
+
+
 'use client'
 
 import Image from "next/image";
@@ -46,6 +51,8 @@ const xavierFrames = [
 // Preloading function removed - using videos now
 
 export default function Home() {
+  // Thumbnail sizes are now handled responsively in CSS
+  
   const [currentFrame, setCurrentFrame] = useState(0)
 
   // Title Animation
@@ -63,7 +70,7 @@ export default function Home() {
       name: 'くさ',
       video: 'kusa-don-1_comp.mp4',
       thumbnail: potatoFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         'くいしんぼう（デブ）',
         'あほ',
         'ザコ',
@@ -76,7 +83,7 @@ export default function Home() {
       name: 'ニキ',
       video: 'Niki-fly-1_comp.mp4',
       thumbnail: nikiFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         '超絶ムキムキ',
         '銀河系最強の戦闘能力',
         '振る舞いがオトメ',
@@ -91,7 +98,7 @@ export default function Home() {
       name: 'ヤヌ',
       video: 'Yanu-walk-1_comp.mp4',
       thumbnail: yanuFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         'くさのペット',
         'くさをペットだと思っている',
         '姑息で狡猾', 
@@ -101,7 +108,7 @@ export default function Home() {
       name: 'イヌ',
       video: 'inu-run-1_comp.mp4',
       thumbnail: inuFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         'ニキに命を救われた',
         'バキバキに筋肉をつけようとしている',
         'ニキを尊敬している',
@@ -111,7 +118,7 @@ export default function Home() {
       name: '校長',
       video: 'kocho-camera-1_comp.mp4',
       thumbnail: kochoFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         'テキトー',
         '金持ち',
         'くさ達の学校の校長'
@@ -121,15 +128,15 @@ export default function Home() {
       name: 'ザビエル・ハエ',
       video: 'Tenshi-Akuma-1_comp.mp4',
       thumbnail: xavierFrames[0],
-      descriptions: [
-        '天使と悪魔ぽく登場したが一般人',
+      descriptions: [ //do NOT change descriptions without my permission!!!
+        '天使と悪魔ぽく登場したが一般人', 
       ]
     },
     {
       name: 'モブ',
       video: 'mobu-clap-1_comp.mp4',
       thumbnail: mobFrames[0],
-      descriptions: [
+      descriptions: [//do NOT change descriptions without my permission!!!
         'モブキャラ'
       ]
     }
@@ -332,28 +339,26 @@ export default function Home() {
               
               {/* Character Thumbnails */}
               <div className="w-full max-w-4xl">
-                <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-7 gap-2 sm:gap-3 lg:gap-4 justify-items-center">
+                <div className="flex flex-wrap justify-center">
                   {characters.map((character, index) => (
                     <button
                       key={index}
                       onClick={() => handleCharacterSelect(index)}
-                      className={`relative group transition-all duration-300 rounded-2xl overflow-hidden border-0 outline-0 ${
+                      className={`relative group transition-all duration-300 border-0 outline-0 m-0 p-0 ${
                         selectedCharacter === index 
                           ? 'scale-110 shadow-2xl shadow-green-400/40 bg-gradient-to-br from-green-100 to-green-200' 
                           : 'hover:scale-105 shadow-lg hover:shadow-xl bg-transparent hover:bg-gradient-to-br hover:from-green-50 hover:to-green-100'
                       }`}
-                      style={{ border: 'none', outline: 'none', background: selectedCharacter === index ? '' : 'transparent' }}
+                      style={{ border: 'none', outline: 'none', margin: 0, padding: 0, background: selectedCharacter === index ? '' : 'transparent' }}
                     >
-                      <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 p-2">
-                        <img
-                          src={`/${character.thumbnail}`}
-                          alt={`${character.name} thumbnail`}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-contain"
-                          loading="eager"
-                          draggable={false}
-                        />
+                                                                      <div className="thumbnail-container">
+                          <img
+                            src={`/${character.thumbnail}`}
+                            alt={`${character.name} thumbnail`}
+                            className="w-full h-full object-contain thumbnail-image"
+                            loading="eager"
+                            draggable={false}
+                          />
                       </div>
                       
                       {/* Selection indicator */}
@@ -476,8 +481,30 @@ export default function Home() {
         />
     </div>
 
-      {/* CSS for responsive spinning kusa */}
+      {/* CSS for responsive spinning kusa and thumbnails */}
       <style jsx>{`
+        .thumbnail-container {
+          width: 50px;
+          height: 50px;
+        }
+        
+        .thumbnail-image {
+          max-width: 50px;
+          max-height: 50px;
+        }
+        
+        @media (min-width: 540px) {
+          .thumbnail-container {
+            width: 70px;
+            height: 70px;
+          }
+          
+          .thumbnail-image {
+            max-width: 60px;
+            max-height: 60px;
+          }
+        }
+        
         @media (min-width: 640px) {
           .spinning-kusa-container {
             right: 50px !important;
