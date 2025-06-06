@@ -43,26 +43,7 @@ const xavierFrames = [
 ]
 
 // Function to preload additional frames for smooth animation
-const preloadAnimationFrames = (frames: string[], characterName: string, setPreloadedFrames: React.Dispatch<React.SetStateAction<Set<string>>>, preloadedFrames: Set<string>) => {
-  console.log(`📦 Preloading additional frames for ${characterName}`)
-  
-  // Preload first 3 frames for smooth start
-  const framesToPreload = frames.slice(0, 3)
-  
-  framesToPreload.forEach(frame => {
-    if (preloadedFrames.has(frame)) return
-    
-    const img = document.createElement('img')
-    img.onload = () => {
-      setPreloadedFrames(prev => new Set([...prev, frame]))
-      console.log(`✨ Preloaded additional frame: ${frame}`)
-    }
-    img.onerror = () => {
-      console.warn(`❌ Failed to preload additional frame: ${frame}`)
-    }
-    img.src = `/${frame}`
-  })
-}
+// Preloading function removed - using videos now
 
 export default function Home() {
   const [currentFrame, setCurrentFrame] = useState(0)
@@ -75,17 +56,13 @@ export default function Home() {
 
   // Character Gallery State
   const [selectedCharacter, setSelectedCharacter] = useState(0) // Index of selected character
-  const [currentCharacterFrame, setCurrentCharacterFrame] = useState(0)
 
-  // Preloading state
-  const [preloadedFrames, setPreloadedFrames] = useState<Set<string>>(new Set())
-
-  // Character configuration - memoized to prevent recreation
+  // Character configuration - memoized to prevent recreation  
   const characters = useMemo(() => [
     {
       name: 'くさ',
-      frames: potatoFrames,
-      fps: 20,
+      video: 'kusa-potato-1_comp.mp4',
+      thumbnail: potatoFrames[0], // Keep first frame for thumbnail
       descriptions: [
         'くいしんぼう（デブ）',
         'あほ',
@@ -97,8 +74,8 @@ export default function Home() {
     },
     {
       name: 'ニキ',
-      frames: nikiFrames,
-      fps: 30,
+      video: 'Niki-fly-1_comp.mp4',
+      thumbnail: nikiFrames[0],
       descriptions: [
         '超絶ムキムキ',
         '銀河系最強の戦闘能力',
@@ -112,8 +89,8 @@ export default function Home() {
     },
     {
       name: 'ヤヌ',
-      frames: yanuFrames,
-      fps: 20,
+      video: 'Yanu-walk-1_comp.mp4',
+      thumbnail: yanuFrames[0],
       descriptions: [
         'くさのペット',
         '姑息で狡猾',
@@ -126,8 +103,8 @@ export default function Home() {
     },
     {
       name: 'イヌ',
-      frames: inuFrames,
-      fps: 24,
+      video: 'inu-run-1_comp.mp4',
+      thumbnail: inuFrames[0],
       descriptions: [
         'ニキに命を救われた',
         'バキバキに筋肉をつけようとしている',
@@ -140,8 +117,8 @@ export default function Home() {
     },
     {
       name: '校長',
-      frames: kochoFrames,
-      fps: 20,
+      video: 'kocho-camera-1_comp.mp4',
+      thumbnail: kochoFrames[0],
       descriptions: [
         'テキトー',
         '金持ち',
@@ -152,8 +129,8 @@ export default function Home() {
     },
     {
       name: 'ザビエル・ハエ',
-      frames: xavierFrames,
-      fps: 24,
+      video: 'Tenshi-Akuma-1_comp.mp4',
+      thumbnail: xavierFrames[0],
       descriptions: [
         '天使と悪魔ぽく登場したが一般人',
         '実は普通',
@@ -165,58 +142,15 @@ export default function Home() {
     },
     {
       name: 'モブ',
-      frames: mobFrames,
-      fps: 20,
+      video: 'mobu-clap-1_comp.mp4',
+      thumbnail: mobFrames[0],
       descriptions: [
         'モブキャラ'
       ]
     }
   ], [])
 
-  // Preload critical frames on page load
-  useEffect(() => {
-    const preloadImages = () => {
-      console.log('🚀 Starting aggressive preloading...')
-      
-      // Critical first frames to preload immediately
-      const criticalFrames = [
-        frames[0], // header2_1_t1.png
-        spinFrames[0], // Spinning-kusa-1-1.png
-        potatoFrames[0], // Kusa-potato-1-1.png
-        nikiFrames[0], // _Niki-fly-1-1.png
-        yanuFrames[0], // Yanu-walk-1-1.png
-        inuFrames[0], // Inu-run-1-1.png
-        kochoFrames[0], // Kocho-camera-1-1.png
-        xavierFrames[0], // Tenshi-Akuma-1-1.png
-        mobFrames[0] // Mobu-clap-1-1.png
-      ]
-
-      let loadedCount = 0
-      const totalFrames = criticalFrames.length
-
-      criticalFrames.forEach(frame => {
-        const img = document.createElement('img')
-        img.onload = () => {
-          console.log(`✅ Preloaded: ${frame}`)
-          setPreloadedFrames(prev => new Set([...prev, frame]))
-          loadedCount++
-          if (loadedCount === totalFrames) {
-            console.log('🎉 Critical frame preloading complete!')
-          }
-        }
-        img.onerror = () => {
-          console.warn(`❌ Failed to preload: ${frame}`)
-          loadedCount++
-          if (loadedCount === totalFrames) {
-            console.log('🎉 Critical frame preloading complete!')
-          }
-        }
-        img.src = `/${frame}`
-      })
-    }
-
-    preloadImages()
-  }, [])
+  // Preloading removed - using videos now
 
 
 
@@ -236,38 +170,10 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Selected character animation
-  useEffect(() => {
-    const selectedChar = characters[selectedCharacter]
-    if (!selectedChar) return
-
-    console.log(`🎬 Starting animation for ${selectedChar.name} at ${selectedChar.fps}fps`)
-    
-    // Preload frames for the selected character IMMEDIATELY
-    preloadAnimationFrames(selectedChar.frames, selectedChar.name, setPreloadedFrames, preloadedFrames)
-    
-    // Start animation immediately without waiting
-    const interval = setInterval(() => {
-      setCurrentCharacterFrame(prev => (prev + 1) % selectedChar.frames.length)
-    }, 1000 / selectedChar.fps)
-
-    return () => {
-      console.log(`⏹️ Stopping animation for ${selectedChar.name}`)
-      clearInterval(interval)
-    }
-  }, [selectedCharacter, characters])
-
-  // Handle character selection - optimized for immediate response
+  // Handle character selection - simplified for video
   const handleCharacterSelect = (index: number) => {
     console.log(`👆 Selected character: ${characters[index].name}`)
-    
-    // Preload the new character's frames immediately before switching
-    const newChar = characters[index]
-    preloadAnimationFrames(newChar.frames, newChar.name, setPreloadedFrames, preloadedFrames)
-    
-    // Set both the character and frame simultaneously 
     setSelectedCharacter(index)
-    setCurrentCharacterFrame(0)
   }
 
   useEffect(() => {
@@ -407,8 +313,8 @@ export default function Home() {
           height: '100vh',
           minHeight: '400px'
         }}>
-          {/* Background Video - Responsive - TEMPORARILY DISABLED FOR TESTING */}
-          {/* <video
+          {/* Background Video - Responsive */}
+          <video
             autoPlay
             muted
             loop
@@ -419,7 +325,7 @@ export default function Home() {
             }}
           >
             <source src="/hero4_proxy_compressed.mov" type="video/mp4" />
-          </video> */}
+          </video>
           
           {/* Content overlay */}
           <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-8 md:px-16 lg:px-24">
@@ -455,7 +361,7 @@ export default function Home() {
                     >
                       <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 p-2">
                         <img
-                          src={`/${character.frames[0]}`}
+                          src={`/${character.thumbnail}`}
                           alt={`${character.name} thumbnail`}
                           width={64}
                           height={64}
@@ -488,15 +394,18 @@ export default function Home() {
                   {/* Large Animation Area */}
                   <div className="flex-shrink-0">
                     <div className="relative">
-                      <img
-                        src={`/${characters[selectedCharacter].frames[currentCharacterFrame]}`}
-                        alt={`${characters[selectedCharacter].name} animation`}
+                      <video
+                        key={selectedCharacter} // Force remount when character changes
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
                         width={300}
                         height={300}
                         className="object-contain sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px]"
-                        loading="eager"
-                        draggable={false}
-                      />
+                      >
+                        <source src={`/${characters[selectedCharacter].video}`} type="video/mp4" />
+                      </video>
 
                     </div>
                   </div>
