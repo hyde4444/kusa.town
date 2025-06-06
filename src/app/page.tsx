@@ -137,25 +137,53 @@ export default function Home() {
 
         if (target === potatoRef.current) {
           console.log(`🥬 くさ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('potato', setCurrentPotatoFrame, potatoFrames, 20) : stopAnimation('potato')
+          if (isVisible) {
+            startAnimation('potato', setCurrentPotatoFrame, potatoFrames, 20)
+          } else {
+            stopAnimation('potato')
+          }
         } else if (target === nikiRef.current) {
           console.log(`💪 ニキ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('niki', setCurrentNikiFrame, nikiFrames, 30) : stopAnimation('niki')
+          if (isVisible) {
+            startAnimation('niki', setCurrentNikiFrame, nikiFrames, 30)
+          } else {
+            stopAnimation('niki')
+          }
         } else if (target === yanuRef.current) {
           console.log(`🐱 ヤヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('yanu', setCurrentYanuFrame, yanuFrames, 20) : stopAnimation('yanu')
+          if (isVisible) {
+            startAnimation('yanu', setCurrentYanuFrame, yanuFrames, 20)
+          } else {
+            stopAnimation('yanu')
+          }
         } else if (target === inuRef.current) {
           console.log(`🐕 イヌ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('inu', setCurrentInuFrame, inuFrames, 24) : stopAnimation('inu')
+          if (isVisible) {
+            startAnimation('inu', setCurrentInuFrame, inuFrames, 24)
+          } else {
+            stopAnimation('inu')
+          }
         } else if (target === kochoRef.current) {
           console.log(`🏫 校長: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('kocho', setCurrentKochoFrame, kochoFrames, 20) : stopAnimation('kocho')
+          if (isVisible) {
+            startAnimation('kocho', setCurrentKochoFrame, kochoFrames, 20)
+          } else {
+            stopAnimation('kocho')
+          }
         } else if (target === mobRef.current) {
           console.log(`👤 モブ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('mob', setCurrentMobFrame, mobFrames, 20) : stopAnimation('mob')
+          if (isVisible) {
+            startAnimation('mob', setCurrentMobFrame, mobFrames, 20)
+          } else {
+            stopAnimation('mob')
+          }
         } else if (target === xavierRef.current) {
           console.log(`👼 ザビエル・ハエ: ${isVisible ? 'ENTERED' : 'EXITED'} viewport (${ratio}% visible)`)
-          isVisible ? startAnimation('xavier', setCurrentXavierFrame, xavierFrames, 24) : stopAnimation('xavier')
+          if (isVisible) {
+            startAnimation('xavier', setCurrentXavierFrame, xavierFrames, 24)
+          } else {
+            stopAnimation('xavier')
+          }
         }
       })
     }, { 
@@ -179,7 +207,7 @@ export default function Home() {
 
     // Add a way to check current animation status
     if (typeof window !== 'undefined') {
-      (window as any).getAnimationStatus = () => {
+      (window as typeof window & { getAnimationStatus: () => { active: number; running: string[] } }).getAnimationStatus = () => {
         const activeAnimations = Object.keys(intervalsRef.current)
         console.log(`📊 Animation Status Report:`)
         console.log(`🎬 Active animations: ${activeAnimations.length}`)
@@ -196,13 +224,14 @@ export default function Home() {
       console.log('🧹 Cleaning up Intersection Observer and animations...')
       observer.disconnect()
       // Clean up all intervals
-      const activeAnimations = Object.keys(intervalsRef.current)
+      const currentIntervals = intervalsRef.current
+      const activeAnimations = Object.keys(currentIntervals)
       if (activeAnimations.length > 0) {
         console.log(`🛑 Stopping ${activeAnimations.length} active animations: ${activeAnimations.join(', ')}`)
       }
-      Object.values(intervalsRef.current).forEach(interval => clearInterval(interval))
+      Object.values(currentIntervals).forEach(interval => clearInterval(interval))
     }
-  }, [potatoFrames.length, nikiFrames.length, yanuFrames.length, inuFrames.length, kochoFrames.length, mobFrames.length, xavierFrames.length])
+  }, [potatoFrames, nikiFrames, yanuFrames, inuFrames, kochoFrames, mobFrames, xavierFrames])
 
   useEffect(() => {
     let ticking = false
