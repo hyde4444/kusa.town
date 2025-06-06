@@ -49,11 +49,7 @@ export default function Home() {
     'Inu-run-1-6.png', 'Inu-run-1-7.png', 'Inu-run-1-8.png', 'Inu-run-1-9.png', 'Inu-run-1-10.png'
   ]
 
-  // Tenshi-Akuma Animation
-  const [currentTenshiFrame, setCurrentTenshiFrame] = useState(0)
-  const tenshiFrames = [
-    'Tenshi-Akuma-1-1.png', 'Tenshi-Akuma-1-2.png', 'Tenshi-Akuma-1-3.png', 'Tenshi-Akuma-1-4.png', 'Tenshi-Akuma-1-5.png', 'Tenshi-Akuma-1-6.png'
-  ]
+
 
   // Kocho Camera Animation
   const [currentKochoFrame, setCurrentKochoFrame] = useState(0)
@@ -124,13 +120,7 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [inuFrames.length])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTenshiFrame((prev) => (prev + 1) % tenshiFrames.length)
-    }, 42) // 24fps = 42ms per frame
 
-    return () => clearInterval(interval)
-  }, [tenshiFrames.length])
 
   useEffect(() => {
     const interval = setInterval(() => {
